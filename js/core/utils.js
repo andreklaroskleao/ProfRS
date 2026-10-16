@@ -1,4 +1,4 @@
-export const ADMIN_UID = 'REPLACE_WITH_YOUR_FIREBASE_UID';
+export const ADMIN_UID = 'wJXTjIruKMdZkqs2ALt4jKibkf02';
 
 export function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
