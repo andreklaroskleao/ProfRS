@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#153a32">
+    <meta name="description" content="Ferramentas de apoio para professores do Rio Grande do Sul.">
+    <title>ProfRS — apoio à docência</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script type="module" src="./js/app.js"></script>
+  </head>
+  <body>
+    <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+    <main id="welcome-view" class="welcome-view">
+      <div class="welcome-copy">
+        <a class="brand-lockup" href="#inicio" aria-label="ProfRS, início">
+          <span class="brand-mark" aria-hidden="true">P</span>
+          <span>Prof<span class="brand-light">RS</span></span>
+        </a>
+        <p class="eyebrow">UM ESPAÇO DE APOIO À DOCÊNCIA</p>
+        <h1>Mais clareza para<br><span>o trabalho de ensinar.</span></h1>
+        <p class="welcome-lede">Organize sua jornada, planeje suas aulas e reúna ferramentas pedagógicas em um só lugar.</p>
+        <div class="welcome-actions">
+          <button id="google-signin" class="button button-primary button-large" type="button">
+            <svg aria-hidden="true" viewBox="0 0 24 24" class="google-mark"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.09-1.92 3.27-4.75 3.27-8.1Z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.65l-3.57-2.77c-.99.66-2.25 1.06-3.71 1.06-2.85 0-5.27-1.92-6.13-4.5H2.18v2.84A11 11 0 0 0 12 23Z"/><path fill="#FBBC05" d="M5.87 14.14A6.6 6.6 0 0 1 5.52 12c0-.74.13-1.45.35-2.14V7.02H2.18A11 11 0 0 0 1 12c0 1.78.43 3.46 1.18 4.98l3.69-2.84Z"/><path fill="#EA4335" d="M12 5.36c1.62 0 3.06.56 4.2 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1a11 11 0 0 0-9.82 6.02l3.69 2.84c.86-2.58 3.28-4.5 6.13-4.5Z"/></svg>
+            Entrar com Google
+          </button>
+          <p class="microcopy">Seus planejamentos ficam associados à sua conta Google.</p>
+        </div>
+        <div class="public-shortcuts" aria-label="Conteúdo público">
+          <button class="text-button" data-public-view="remuneracao" type="button">Consultar remuneração <span aria-hidden="true">↗</span></button>
+          <button class="text-button" data-public-view="noticias" type="button">Notícias e links oficiais <span aria-hidden="true">↗</span></button>
+        </div>
+        <p class="privacy-note">O ProfRS é uma ferramenta independente de apoio. Não representa a SEDUC-RS, o CPERS ou outros órgãos públicos.</p>
+      </div>
+      <div class="welcome-art" aria-hidden="true">
+        <div class="art-sun"></div>
+        <div class="art-card art-card-main">
+          <div class="art-card-top"><span class="art-dot"></span><span class="art-line short"></span><span class="art-menu">···</span></div>
+          <div class="art-kicker">SEMANA DE TRABALHO</div>
+          <div class="art-hours">20<span>h</span></div>
+          <div class="art-bar"><span></span></div>
+          <div class="art-legend"><span><i class="legend-green"></i> Interação</span><span><i class="legend-yellow"></i> Planejamento</span></div>
+        </div>
+        <div class="art-card art-card-note"><span class="note-icon">✳</span><span>Planejar também<br>é ensinar.</span></div>
+        <div class="art-leaf leaf-one"></div><div class="art-leaf leaf-two"></div>
+        <div class="art-caption">Feito para acompanhar<br>o seu dia a dia.</div>
+      </div>
+    </main>
+
+    <section id="public-view" class="public-view" hidden>
+      <header class="public-header">
+        <a class="brand-lockup" href="#inicio"><span class="brand-mark" aria-hidden="true">P</span><span>Prof<span class="brand-light">RS</span></span></a>
+        <button id="public-back" class="button button-quiet" type="button">← Início</button>
+      </header>
+      <div id="public-content" class="public-content"></div>
+    </section>
+
+    <div id="app-view" class="app-view" hidden>
+      <aside id="sidebar" class="sidebar" aria-label="Navegação principal">
+        <a class="brand-lockup sidebar-brand" href="#inicio"><span class="brand-mark" aria-hidden="true">P</span><span>Prof<span class="brand-light">RS</span></span></a>
+        <p class="nav-label">ESPAÇO DO PROFESSOR</p>
+        <nav class="primary-nav">
+          <button class="nav-item is-active" data-view="inicio" type="button"><span class="nav-icon">⌂</span>Painel</button>
+          <span class="nav-label nav-divider">FERRAMENTAS</span>
+          <button class="nav-item" data-view="jornada" type="button"><span class="nav-icon">◷</span>Jornada e finanças</button>
+          <button class="nav-item" data-view="planejamento" type="button"><span class="nav-icon">▤</span>Planejamento</button>
+          <button class="nav-item" data-view="pei" type="button"><span class="nav-icon">◎</span>PEI</button>
+          <span class="nav-label nav-divider">COMUNIDADE</span>
+          <button class="nav-item" data-view="noticias" type="button"><span class="nav-icon">◫</span>Notícias e documentos</button>
+          <button class="nav-item" data-view="remuneracao" type="button"><span class="nav-icon">R$</span>Consulta salarial</button>
+          <button id="admin-nav" class="nav-item" data-view="admin" type="button" hidden><span class="nav-icon">⚙</span>Administração</button>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="help-card"><span class="help-spark">✳</span><strong>Um passo de cada vez.</strong><p>Suas ideias e seu trabalho merecem espaço.</p></div>
+          <button id="signout" class="nav-item signout-button" type="button"><span class="nav-icon">↪</span>Sair da conta</button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="topbar">
+          <button id="mobile-menu" class="icon-button mobile-menu" type="button" aria-label="Abrir menu" aria-expanded="false">☰</button>
+          <div class="topbar-context"><span class="topbar-kicker">ÁREA DO PROFESSOR</span><span id="topbar-title">Painel inicial</span></div>
+          <div class="topbar-user"><span id="user-name">Professor(a)</span><img id="user-avatar" alt="" hidden></div>
+        </header>
+        <main id="main-content" class="page-content" tabindex="-1"></main>
+        <footer class="app-footer"><span>ProfRS · Ferramentas de apoio à docência</span><a href="#privacidade" id="privacy-link">Privacidade e uso responsável</a></footer>
+      </div>
+    </div>
+  </body>
+</html>

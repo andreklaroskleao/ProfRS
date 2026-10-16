@@ -1,0 +1,204 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // Troque o UID abaixo pelo UID imutável do administrador no Firebase Auth.
+    // A interface também usa o UID, mas estas regras são a autorização efetiva.
+    function isAdmin() {
+      return signedIn() && request.auth.uid == '__ADMIN_UID__';
+    }
+
+    function ownsUser(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function optionalText(data, field, maxLength) {
+      return !(field in data)
+        || (data.get(field, '') is string && data.get(field, '').size() <= maxLength);
+    }
+
+    function validProfile(userId, data, isCreate) {
+      return data.keys().hasOnly(['uid', 'displayName', 'email', 'createdAt', 'updatedAt'])
+        && data.keys().hasAll(['uid', 'displayName', 'email', 'createdAt', 'updatedAt'])
+        && data.uid == userId
+        && data.displayName is string && data.displayName.size() <= 160
+        && data.email is string && data.email.size() <= 254
+        && data.createdAt is timestamp
+        && data.updatedAt == request.time
+        && (isCreate || data.createdAt == resource.data.createdAt);
+    }
+
+    function validPlan(data, isCreate) {
+      return data.keys().hasOnly([
+          'title', 'planType', 'schoolYear', 'schoolName', 'subject', 'grade', 'className',
+          'trimester', 'startDate', 'endDate', 'generalObjectives', 'selectedSkills', 'contents',
+          'methodology', 'activities', 'resourcesText', 'assessmentCriteria', 'observations',
+          'status', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasAll(['title', 'planType', 'schoolYear', 'subject', 'grade', 'selectedSkills', 'status', 'createdAt', 'updatedAt'])
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 180
+        && data.planType in ['annual', 'trimester', 'weekly']
+        && data.schoolYear is int && data.schoolYear >= 2000 && data.schoolYear <= 2100
+        && data.subject is string && data.subject.size() <= 160
+        && data.grade is string && data.grade.size() <= 100
+        && data.selectedSkills is list && data.selectedSkills.size() <= 60
+        && data.status in ['draft', 'completed']
+        && optionalText(data, 'schoolName', 160)
+        && optionalText(data, 'className', 120)
+        && optionalText(data, 'trimester', 80)
+        && optionalText(data, 'startDate', 30)
+        && optionalText(data, 'endDate', 30)
+        && optionalText(data, 'generalObjectives', 10000)
+        && optionalText(data, 'contents', 10000)
+        && optionalText(data, 'methodology', 10000)
+        && optionalText(data, 'activities', 10000)
+        && optionalText(data, 'resourcesText', 10000)
+        && optionalText(data, 'assessmentCriteria', 10000)
+        && optionalText(data, 'observations', 10000)
+        && data.createdAt is timestamp
+        && data.updatedAt == request.time
+        && (isCreate || data.createdAt == resource.data.createdAt);
+    }
+
+    function validPei(data, isCreate) {
+      return data.keys().hasOnly([
+          'studentReference', 'educationStage', 'grade', 'className', 'context', 'strengths', 'barriers',
+          'educationalNeeds', 'supports', 'generalObjectives', 'specificObjectives', 'priorities',
+          'curricularFlexibilizations', 'strategies', 'resources', 'activityAdjustments', 'trimesterPlans',
+          'monitoringStrategies', 'reviewCriteria', 'assessmentCriteria', 'progressIndicators',
+          'assessmentStrategies', 'progressRecords', 'observedDifficulties', 'necessaryAdjustments',
+          'nextActions', 'status', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasAll(['studentReference', 'status', 'createdAt', 'updatedAt'])
+        && data.studentReference is string && data.studentReference.size() <= 120
+        && data.status in ['draft', 'completed']
+        && data.createdAt is timestamp
+        && data.updatedAt == request.time
+        && (isCreate || data.createdAt == resource.data.createdAt)
+        && optionalText(data, 'educationStage', 120)
+        && optionalText(data, 'grade', 100)
+        && optionalText(data, 'className', 120)
+        && optionalText(data, 'context', 5000)
+        && optionalText(data, 'strengths', 5000)
+        && optionalText(data, 'barriers', 5000)
+        && optionalText(data, 'educationalNeeds', 5000)
+        && optionalText(data, 'supports', 5000)
+        && optionalText(data, 'generalObjectives', 8000)
+        && optionalText(data, 'specificObjectives', 8000)
+        && optionalText(data, 'priorities', 5000)
+        && optionalText(data, 'curricularFlexibilizations', 8000)
+        && optionalText(data, 'strategies', 8000)
+        && optionalText(data, 'resources', 5000)
+        && optionalText(data, 'activityAdjustments', 5000)
+        && optionalText(data, 'trimesterPlans', 8000)
+        && optionalText(data, 'monitoringStrategies', 5000)
+        && optionalText(data, 'reviewCriteria', 5000)
+        && optionalText(data, 'assessmentCriteria', 8000)
+        && optionalText(data, 'progressIndicators', 5000)
+        && optionalText(data, 'assessmentStrategies', 5000)
+        && optionalText(data, 'progressRecords', 8000)
+        && optionalText(data, 'observedDifficulties', 5000)
+        && optionalText(data, 'necessaryAdjustments', 5000)
+        && optionalText(data, 'nextActions', 5000);
+    }
+
+    function validNews(data) {
+      return data.keys().hasOnly(['title', 'summary', 'content', 'category', 'sourceName', 'sourceUrl', 'publishedAt', 'createdAt', 'updatedAt', 'status'])
+        && data.keys().hasAll(['title', 'summary', 'content', 'category', 'sourceName', 'sourceUrl', 'publishedAt', 'createdAt', 'updatedAt', 'status'])
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 180
+        && data.summary is string && data.summary.size() <= 500
+        && data.content is string && data.content.size() <= 12000
+        && data.category is string && data.category.size() <= 60
+        && data.sourceName is string && data.sourceName.size() <= 120
+        && data.sourceUrl is string && data.sourceUrl.matches('^https://[^/]+.*$') && data.sourceUrl.size() <= 2048
+        && data.publishedAt is string && data.publishedAt.size() <= 40
+        && data.status in ['draft', 'published', 'archived']
+        && data.createdAt is timestamp && data.updatedAt == request.time;
+    }
+
+    function validLink(data) {
+      return data.keys().hasOnly(['title', 'description', 'category', 'url', 'institution', 'order', 'active', 'createdAt', 'updatedAt'])
+        && data.keys().hasAll(['title', 'description', 'category', 'url', 'institution', 'order', 'active', 'createdAt', 'updatedAt'])
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 150
+        && data.description is string && data.description.size() <= 500
+        && data.category is string && data.category.size() <= 60
+        && data.url is string && data.url.matches('^https://[^/]+.*$') && data.url.size() <= 2048
+        && data.institution is string && data.institution.size() <= 120
+        && data.order is int && data.order >= 0 && data.order <= 9999
+        && data.active is bool
+        && data.createdAt is timestamp && data.updatedAt == request.time;
+    }
+
+    function validSalary(data) {
+      return data.keys().hasOnly(['classLevel', 'reference', 'effectivePeriod', 'effectiveAt', 'weeklyHours', 'amount', 'amountType', 'sourceName', 'sourceUrl', 'status', 'notes', 'createdAt', 'updatedAt'])
+        && data.keys().hasAll(['classLevel', 'reference', 'effectivePeriod', 'effectiveAt', 'weeklyHours', 'amount', 'amountType', 'sourceName', 'sourceUrl', 'status', 'createdAt', 'updatedAt'])
+        && data.classLevel is string && data.classLevel.size() <= 80
+        && data.reference is string && data.reference.size() <= 80
+        && data.effectivePeriod is string && data.effectivePeriod.size() <= 80
+        && data.effectiveAt is string
+        && data.weeklyHours is int && data.weeklyHours > 0 && data.weeklyHours <= 80
+        && data.amount is number && data.amount >= 0 && data.amount <= 1000000
+        && data.amountType in ['Subsídio', 'Vencimento básico', 'Remuneração bruta', 'Remuneração líquida']
+        && data.sourceName is string && data.sourceName.size() <= 120
+        && data.sourceUrl is string && data.sourceUrl.matches('^https://[^/]+.*$') && data.sourceUrl.size() <= 2048
+        && data.status in ['draft', 'published']
+        && (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000))
+        && data.createdAt is timestamp && data.updatedAt == request.time;
+    }
+
+    match /users/{userId} {
+      allow read: if ownsUser(userId);
+      allow create: if ownsUser(userId) && validProfile(userId, request.resource.data, true);
+      allow update: if ownsUser(userId) && validProfile(userId, request.resource.data, false);
+      allow delete: if ownsUser(userId);
+
+      match /plans/{planId} {
+        allow read, delete: if ownsUser(userId);
+        allow create: if ownsUser(userId) && validPlan(request.resource.data, true);
+        allow update: if ownsUser(userId) && validPlan(request.resource.data, false);
+      }
+
+      match /peis/{peiId} {
+        allow read, delete: if ownsUser(userId);
+        allow create: if ownsUser(userId) && validPei(request.resource.data, true);
+        allow update: if ownsUser(userId) && validPei(request.resource.data, false);
+      }
+    }
+
+    match /publicContent/news/items/{newsId} {
+      allow get, list: if isAdmin() || resource.data.status == 'published';
+      allow create, update: if isAdmin() && validNews(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /publicContent/officialLinks/items/{linkId} {
+      allow get, list: if isAdmin() || resource.data.active == true;
+      allow create, update: if isAdmin() && validLink(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /publicContent/salaryTables/items/{salaryId} {
+      allow get, list: if isAdmin() || resource.data.status == 'published';
+      allow create, update: if isAdmin() && validSalary(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /appConfig/{configId} {
+      allow get: if isAdmin() || configId == 'public';
+      allow list: if isAdmin();
+      allow create, update: if isAdmin()
+        && configId == 'public'
+        && request.resource.data.keys().hasOnly(['appName', 'maintenanceMessage', 'updatedAt'])
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if isAdmin() && configId == 'public';
+    }
+
+    // Negação explícita para qualquer caminho não especificado acima.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
